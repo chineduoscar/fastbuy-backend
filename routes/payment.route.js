@@ -9,7 +9,7 @@ import { Router } from "express";
 const router = Router();
 
 router.post("/intialize", authenticate, initializePayment);
-router.get("/verify/:reference", verifyPayment);
+router.get("/verify/:reference", authenticate, verifyPayment);
 router.post("/webhook", paymentWebhook);
 
 export default router;
