@@ -122,7 +122,6 @@ const verifyPayment = async (req, res) => {
 };
 
 const paymentWebhook = async (req, res) => {
-  console.log(req.headers);
   try {
     const hash = crypto
       .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
@@ -130,9 +129,36 @@ const paymentWebhook = async (req, res) => {
       .digest("hex");
     if (hash == req.headers["x-paystack-signature"]) {
       console.log(req.body);
-      const { event } = req.body;
+      const { event, body } = req.body;
+
+      if (event === "charge.success") {
+        await Payment.findOneAndUpdate(
+          { reference },
+          { status: "success" },
+
+          {
+            new: true,
+            runValidators: true,
+          },
+        );
+
+        res.status(StatusCodes.OK).json({
+          message: "Webhook verified",
+          status: true,
+          data: {
+            reference: body.reference,
+            status: "success",
+          },
+        });
+      }
     }
-  } catch {}
+  } catch {
+    console.log(error.response);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Oops! Something went wrong",
+      status: false,
+    });
+  }
 };
 
 export { initializePayment, verifyPayment, paymentWebhook };
