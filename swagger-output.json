@@ -1,0 +1,209 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Fast Buy",
+    "description": "Website to buy food instantly",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "description": "Register a new user account",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["fullName", "email", "password"],
+              "properties": {
+                "fullName": {
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "johndoe@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password",
+                  "example": "oscar045"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Account created!",
+                  "user": {
+                    "id": "65f123456789abcdef123456",
+                    "fullName": "John Doe",
+                    "email": "johndoe@gmail.com"
+                  },
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "status": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "missingFields": {
+                    "summary": "Required fields are missing",
+                    "value": {
+                      "message": "Fill all required fields.",
+                      "status": false
+                    }
+                  },
+                  "emailExists": {
+                    "summary": "Email already exists",
+                    "value": {
+                      "message": "Email already in use",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Oops! Something went wrong",
+                  "status": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Login an existing user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "johndoe@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password",
+                  "example": "oscar045"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Login successful!",
+                  "user": {
+                    "id": "65f123456789abcdef123456",
+                    "fullName": "John Doe",
+                    "email": "johndoe@gmail.com"
+                  },
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "status": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid Credentials",
+                  "status": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Oops! Something went wrong",
+                  "status": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product": {
+      "get": {
+        "summary": "Get all food products",
+        "description": "Fetches all available food products.",
+        "responses": {
+          "200": {
+            "description": "Products fetched successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": true,
+                  "message": "Products fetched successfully",
+                  "products": [
+                    {
+                      "id": 1,
+                      "name": "Jollof Rice",
+                      "price": 2500
+                    },
+                    {
+                      "id": 2,
+                      "name": "Fried Rice",
+                      "price": 3000
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": false,
+                  "message": "Oops! Something went wrong"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { foodItems } from "../data/products.js";
 
-const getAllProducts = async (req, res) => {
+const getAllProducts = (req, res) => {
   try {
     res.status(StatusCodes.OK).json({
       status: true,

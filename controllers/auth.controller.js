@@ -7,7 +7,6 @@ const register = async (req, res) => {
   try {
     const body = req.body;
     const { fullName, email, password } = body;
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     if (!fullName && !email && !password) {
       res.status(StatusCodes.BAD_REQUEST).json({
@@ -17,6 +16,7 @@ const register = async (req, res) => {
 
       return;
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
