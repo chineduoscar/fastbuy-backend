@@ -16,7 +16,11 @@ const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://fastestbuy.vercel.app"],
+  }),
+);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/auth", authRoute);
