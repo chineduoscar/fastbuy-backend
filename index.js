@@ -15,7 +15,13 @@ const app = express();
 const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  }),
+);
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://fastestbuy.vercel.app"],
